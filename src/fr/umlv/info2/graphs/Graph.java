@@ -240,5 +240,86 @@ public interface Graph {
 			});
 		return new ShortestPathFromOneVertex(source, d, p);
 	}
+
+
+	public static ShortestPathFromOneVertex dijkstra(Graph g, int source) {
+		List<Integer> F = new ArrayList<>();
+		int[] d = new int[g.numberOfVertices()];
+		int[] pi = new int[g.numberOfVertices()];
+
+		for(int t=0; t<g.numberOfVertices(); t++) {
+			F.add(t);
+			pi[t] = -1;
+			if(t == source) {
+				d[t] = 0;
+			} else {
+				d[t] = Integer.MAX_VALUE;
+			}
+		}
+
+		while(F.size() != 0) {
+			int t = extractMin(F, d);
+			g.forEachEdge(t, e -> {
+				int s = e.getEnd();
+				if(d[t] + g.getWeight(t, s) < d[s]) {
+					d[s] = d[t] + g.getWeight(t, s);
+					pi[s] = t;
+				}
+			});
+		}
+		return new ShortestPathFromOneVertex(source, d, pi);
+	}
+
+	private static int extractMin(List<Integer> F, int[] d) {
+		int min = Integer.MAX_VALUE;
+		int vertice = 0;
+		for(int i=0; i<d.length; i++) {
+			if(d[i] < min && F.contains(i)) {
+				min = d[i];
+				vertice = i;
+			}
+		}
+		F.remove((Integer) vertice);
+		return vertice;
+	}
+
+	public static int astar(Graph graph, int s, int t){
+		// Initialiser f, g, h
+		int[] f = new int[graph.numberOfVertices()];
+		int[] g = new int[graph.numberOfVertices()];
+		int[] h = new int[graph.numberOfVertices()];
+		var border = new ArrayList<Integer>();
+		var computed = new ArrayList<Integer>();
+
+
+		while(!border.isEmpty()){
+			int x = extractMin(border, f);
+			if(x == t){
+				return f[x]; // On retourne la longueur du chemin
+			}
+			border.remove(x);
+			graph.forEachEdge(x, y ->{
+				if(computed.contains(y.getEnd())){
+					if(){
+						//
+						//
+						if(!border.contains(y.getEnd())){
+							border.add(y.getEnd());
+						}
+					}
+				}
+				else{
+					//
+					//
+					border.add(y.getEnd());
+					computed.add(y.getEnd());
+				}
+			});
+		}
+
+		return -1; // Sommet t non accessible
+
+		// Retourner à la place un ShortestPathFromOneVertex
+	}
 	
 }
