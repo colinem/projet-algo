@@ -1,16 +1,17 @@
 package fr.umlv.info2.graphs;
 
+import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
-import parsers.Parser;
+import parser.Parser;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		try {
-			Graph.astar(Parser.parse(Path.of(args[0] + ".gr")), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+//			Graph.astar(Parser.parse(Path.of("docs/" + args[0] + ".gr")), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		} catch (IndexOutOfBoundsException | InvalidPathException | NumberFormatException e) {
 			usage();
 		}
