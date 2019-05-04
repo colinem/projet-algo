@@ -292,12 +292,11 @@ public interface Graph {
 		return result;
 	}
 
-	public static int astar(Graph graph, int s, int t, int[][] coord){
+	public static ShortestPathFromOneVertex astar(Graph graph, int s, int t, int[][] coord){
 		// Initialiser f, g, h
 		int[] f = new int[graph.numberOfVertices()];
 		int[] g = new int[graph.numberOfVertices()];
 		int[] h = initApproximateArray(coord, t);
-
 
 		for(int tmp = 0; tmp < graph.numberOfVertices(); tmp++) {
 			if(tmp != s) {
@@ -305,7 +304,6 @@ public interface Graph {
 				g[tmp] = Integer.MAX_VALUE;
 			}
 		}
-
 
 		var border = new ArrayList<Integer>();
 		var computed = new ArrayList<Integer>();
@@ -316,7 +314,7 @@ public interface Graph {
 		while(!border.isEmpty()){
 			int x = extractMin(border, f);
 			if(x == t){
-				return f[x]; // On retourne la longueur du chemin
+                return new ShortestPathFromOneVertex(f[x], g, f); // Vérifier que c'est bien ça
 			}
 			border.remove(x);
 			graph.forEachEdge(x, y ->{
@@ -337,10 +335,7 @@ public interface Graph {
 				}
 			});
 		}
-
-		return -1; // Sommet t non accessible
-
-		// Retourner à la place un ShortestPathFromOneVertex
+		return new ShortestPathFromOneVertex(s, g, f); // Vérifier que c'est bien g et f les arguments
 	}
 	
 }
