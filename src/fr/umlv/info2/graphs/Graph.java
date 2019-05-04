@@ -284,8 +284,12 @@ public interface Graph {
 	}
 
 
-	private static int[] initApproximateArray(int[][] coordArray, int t){
-		return new int[0];
+	private static int[] initApproximateArray(int[][] coordArray, int t) {
+		var result = new int[coordArray.length];
+		for (var x = 0 ; x < coordArray.length ; ++x)
+			result[x] = (int) Math.sqrt(Math.pow(coordArray[t][0] - coordArray[x][0], 2)
+					+ Math.pow(coordArray[t][1] - coordArray[x][1], 2));
+		return result;
 	}
 
 	public static int astar(Graph graph, int s, int t, int[][] coord){
