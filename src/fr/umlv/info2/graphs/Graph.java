@@ -300,9 +300,9 @@ public interface Graph {
 			border.remove(x);
 			graph.forEachEdge(x, y ->{
 				if(computed.contains(y.getEnd())){
-					if(){
-						//
-						//
+					if(g[y.getEnd()] > g[x] + graph.getWeight(x, y.getEnd())){
+						g[y.getEnd()] = g[x] + graph.getWeight(x, y.getEnd());
+						f[y.getEnd()] = g[y.getEnd()] + h[y.getEnd()];
 						if(!border.contains(y.getEnd())){
 							border.add(y.getEnd());
 						}
@@ -311,6 +311,8 @@ public interface Graph {
 				else{
 					//
 					//
+					g[y.getEnd()] = g[x] + graph.getWeight(x, y.getEnd());
+					f[y.getEnd()] = g[y.getEnd()] + h[y.getEnd()];
 					border.add(y.getEnd());
 					computed.add(y.getEnd());
 				}
