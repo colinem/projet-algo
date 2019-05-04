@@ -283,13 +283,30 @@ public interface Graph {
 		return vertice;
 	}
 
-	public static int astar(Graph graph, int s, int t){
+
+	private static int[] initApproximateArray(int[][] coordArray, int t){
+		return new int[0];
+	}
+
+	public static int astar(Graph graph, int s, int t, int[][] coord){
 		// Initialiser f, g, h
 		int[] f = new int[graph.numberOfVertices()];
 		int[] g = new int[graph.numberOfVertices()];
-		int[] h = new int[graph.numberOfVertices()];
+		int[] h = initApproximateArray(coord, t);
+
+
+		for(int tmp = 0; tmp < graph.numberOfVertices(); tmp++) {
+			if(tmp != s) {
+				f[tmp] = Integer.MAX_VALUE;
+				g[tmp] = Integer.MAX_VALUE;
+			}
+		}
+
+
 		var border = new ArrayList<Integer>();
 		var computed = new ArrayList<Integer>();
+		border.add(s);
+		computed.add(s);
 
 
 		while(!border.isEmpty()){
@@ -309,8 +326,6 @@ public interface Graph {
 					}
 				}
 				else{
-					//
-					//
 					g[y.getEnd()] = g[x] + graph.getWeight(x, y.getEnd());
 					f[y.getEnd()] = g[y.getEnd()] + h[y.getEnd()];
 					border.add(y.getEnd());
