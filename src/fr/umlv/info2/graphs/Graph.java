@@ -5,15 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public interface Graph {
 	/**
@@ -128,147 +124,6 @@ public interface Graph {
 			throw e;
 		}
 	}
-	
-	public static List<Integer> DFS(Graph g) {
-		return DFS(g, 0);
-	}
-	
-	public static List<Integer> DFS(Graph g, int s0) {
-		var values = new ArrayList<Integer>();
-		var nVertices = g.numberOfVertices();
-		var visibility = new boolean[nVertices];
-		for (var vertice = s0 ; vertice < nVertices ; ++vertice)
-			DFS(g, vertice, visibility, values, new int[nVertices][2], new LongAdder());
-		for (var vertice = 0 ; vertice < s0 ; ++vertice)
-			DFS(g, vertice, visibility, values, new int[nVertices][2], new LongAdder());
-		return values;
-	}
-	
-	private static void DFS(Graph g, int vertice, boolean[] visibility, List<Integer> listOfValues, int[][] values, LongAdder adder) {
-		if (visibility[vertice])
-			return;
-		adder.increment();
-		visibility[vertice] = true;
-		listOfValues.add(vertice);
-		values[vertice][0] = adder.intValue();
-		g.forEachEdge(vertice, edge -> DFS(g, edge.getEnd(), visibility, listOfValues, values, adder));
-		adder.increment();
-		values[vertice][1] = adder.intValue();
-	}
-	
-	public static int[][] timedDFS(Graph g) {
-		return timedDFS(g, 0);
-	}
-	
-	public static int[][] timedDFS(Graph g, int s0) {
-		var nVertices = g.numberOfVertices();
-		var values = new int[nVertices][2];
-		var visibility = new boolean[nVertices];
-		var adder = new LongAdder();
-		adder.decrement();
-		for (var vertice = s0 ; vertice < nVertices ; ++vertice)
-			DFS(g, vertice, visibility, new LinkedList<Integer>(), values, adder);
-		for (var vertice = 0 ; vertice < s0 ; ++vertice)
-			DFS(g, vertice, visibility, new LinkedList<Integer>(), values, adder);
-		return values;
-	}
-	
-	public static List<Integer> BFS(Graph g) {
-		return BFS(g, 0);
-	}
-	
-	public static List<Integer> BFS(Graph g, int s0) {
-		var values = new ArrayList<Integer>();
-		var nVertices = g.numberOfVertices();
-		var visibility = new boolean[nVertices];
-		var queue = new ArrayBlockingQueue<Integer>(nVertices);
-		for (var vertice = s0 ; vertice < nVertices ; ++vertice)
-			BFSPerVertice(g, values, visibility, queue, vertice);
-		for (var vertice = 0 ; vertice < s0 ; ++vertice)
-			BFSPerVertice(g, values, visibility, queue, vertice);
-		return values;
-	}
-
-	private static void BFSPerVertice(Graph g, ArrayList<Integer> values, boolean[] visibility,
-			ArrayBlockingQueue<Integer> queue, int vertice) {
-		queue.offer(vertice);
-		while (!queue.isEmpty()) {
-			var v = queue.poll();
-			if (!visibility[v]) {
-				visibility[v] = true;
-				values.add(v);
-				g.forEachEdge(v, e -> queue.offer(e.getEnd()));
-			}
-		}
-	}	
-	
-	public static List<Integer> topologicalSort(Graph g) {
-		return topologicalSort(g, () -> {});
-	}
-	
-	public static List<Integer> topologicalSort(Graph g, Runnable toDoIfCycle) {
-		var nVertices = g.numberOfVertices();
-		var visibility = new boolean[nVertices];
-		var values = new int[nVertices][2];
-		for (var vertice = 0 ; vertice < nVertices ; ++vertice)
-			DFS(g, vertice, visibility, new ArrayList<Integer>(), values, new LongAdder());
-		return Stream.of(values).sorted((v1, v2) -> v1[1] > v2[1] ? v1[1] : v2[1]).map(v -> v[0]).collect(Collectors.toList());
-		// TODO doesn't work ._.
-	}
-	
-	public static ShortestPathFromOneVertex bellmanFord(Graph g, int source) {
-		var d = new int[g.numberOfVertices()];
-		var p = new int[g.numberOfVertices()];
-		for (var i = 0 ; i < g.numberOfVertices() ; ++i) {
-			d[i] = Integer.MAX_VALUE;
-			p[i] = Integer.MAX_VALUE;
-		}
-		d[source] = 0;
-		p[source] = source;
-		for (var i = 0 ; i < g.numberOfVertices() ; ++i)
-			for (var v = 0 ; v < g.numberOfVertices() ; ++v)
-				g.forEachEdge(v, e -> {
-					if (d[e.getEnd()] > d[e.getStart()]+e.getValue()) {
-						d[e.getEnd()] = d[e.getStart()]+e.getValue();
-						p[e.getEnd()] = e.getStart();
-					}					
-				});
-		for (var v = 0 ; v < g.numberOfVertices() ; ++v)
-			g.forEachEdge(v, e -> {
-				if (d[e.getEnd()] > d[e.getStart()]+e.getValue())
-					throw new IllegalArgumentException("The graph has a negative circle.");
-			});
-		return new ShortestPathFromOneVertex(source, d, p);
-	}
-
-
-	public static ShortestPathFromOneVertex dijkstra(Graph g, int source) {
-		List<Integer> F = new ArrayList<>();
-		int[] d = new int[g.numberOfVertices()];
-		int[] pi = new int[g.numberOfVertices()];
-
-		for(int t=0; t<g.numberOfVertices(); t++) {
-			F.add(t);
-			pi[t] = -1;
-			if(t == source) {
-				d[t] = 0;
-			} else {
-				d[t] = Integer.MAX_VALUE;
-			}
-		}
-
-		while(F.size() != 0) {
-			int t = extractMin(F, d);
-			g.forEachEdge(t, e -> {
-				int s = e.getEnd();
-				if(d[t] + g.getWeight(t, s) < d[s]) {
-					d[s] = d[t] + g.getWeight(t, s);
-					pi[s] = t;
-				}
-			});
-		}
-		return new ShortestPathFromOneVertex(source, d, pi);
-	}
 
 	private static int extractMin(List<Integer> F, int[] d) {
 		int min = Integer.MAX_VALUE;
@@ -292,50 +147,50 @@ public interface Graph {
 		return result;
 	}
 
-	public static ShortestPathFromOneVertex astar(Graph graph, int s, int t, int[][] coord){
+	public static Optional<ShortestPathFromOneVertex> astar(Graph graph, int s, int t, int[][] coord) {
 		// Initialiser f, g, h
-		int[] f = new int[graph.numberOfVertices()];
-		int[] g = new int[graph.numberOfVertices()];
-		int[] h = initApproximateArray(coord, t);
-
-		for(int tmp = 0; tmp < graph.numberOfVertices(); tmp++) {
+		var f = new int[graph.numberOfVertices()];
+		var g = new int[graph.numberOfVertices()];
+		var h = initApproximateArray(coord, t);
+		var pi = new int[graph.numberOfVertices()];
+		for (var tmp = 0 ; tmp < graph.numberOfVertices() ; tmp++)
 			if(tmp != s) {
 				f[tmp] = Integer.MAX_VALUE;
 				g[tmp] = Integer.MAX_VALUE;
 			}
-		}
 
 		var border = new ArrayList<Integer>();
 		var computed = new ArrayList<Integer>();
 		border.add(s);
 		computed.add(s);
 
-
-		while(!border.isEmpty()){
-			int x = extractMin(border, f);
-			if(x == t){
-                return new ShortestPathFromOneVertex(f[x], g, f); // Vérifier que c'est bien ça
-			}
+		while (!border.isEmpty()) {
+			var x = extractMin(border, f);
+			if (x == t)
+                return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi)); // Verifier que c'est bien g et f les arguments
 			border.remove(x);
-			graph.forEachEdge(x, y ->{
-				if(computed.contains(y.getEnd())){
-					if(g[y.getEnd()] > g[x] + graph.getWeight(x, y.getEnd())){
-						g[y.getEnd()] = g[x] + graph.getWeight(x, y.getEnd());
-						f[y.getEnd()] = g[y.getEnd()] + h[y.getEnd()];
-						if(!border.contains(y.getEnd())){
-							border.add(y.getEnd());
+			graph.forEachEdge(x, edge -> {
+				var y = edge.getEnd();
+				if (computed.contains(edge.getEnd())) {
+					if (g[y] > g[x] + edge.getValue()) {
+						g[y] = g[x] + edge.getValue();
+						pi[y] = x;
+						f[y] = g[y] + h[y];
+						if (!border.contains(y)) {
+							border.add(y);
 						}
 					}
 				}
-				else{
-					g[y.getEnd()] = g[x] + graph.getWeight(x, y.getEnd());
-					f[y.getEnd()] = g[y.getEnd()] + h[y.getEnd()];
-					border.add(y.getEnd());
-					computed.add(y.getEnd());
+				else {
+					g[y] = g[x] + edge.getValue();
+					pi[y] = x;
+					f[y] = g[y] + h[y];
+					border.add(y);
+					computed.add(y);
 				}
 			});
 		}
-		return new ShortestPathFromOneVertex(s, g, f); // Vérifier que c'est bien g et f les arguments
+		return Optional.empty();
 	}
 	
 }

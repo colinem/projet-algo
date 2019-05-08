@@ -4,16 +4,18 @@ import java.util.Arrays;
 
 public class ShortestPathFromOneVertex {
 	private final int source;
+	private final int destination;
 	private final int[] d;
 	private final int[] pi;
 
-	ShortestPathFromOneVertex(int source, int[] d, int[] pi) {
+	ShortestPathFromOneVertex(int source, int destination, int[] d, int[] pi) {
 		this.source = source;
+		this.destination = destination;
 		this.d = d;
 		this.pi = pi;
 	}
 
-	public void printShortestPathTo(int destination) {
+	public void printShortestPath() {
 		var sb = new StringBuilder("Shortest path from ").append(source).append(" to ").append(destination).append(" :    ").append(source);
 		printShortestPathTo(sb, destination);
 		System.out.println(sb);
@@ -26,17 +28,8 @@ public class ShortestPathFromOneVertex {
 		sb.append(" --> ").append(destination);
 	}
 
-	public void printShortestPaths() {
-		for (int i = 0; i < d.length; i++) {
-			if (i == source) {
-				continue;
-			}
-			printShortestPathTo(i);
-		}
-	}
-
 	@Override
 	public String toString() {
-		return source + " " + Arrays.toString(d) + " " + Arrays.toString(pi);
+		return "s=" + source + " ; d=" + destination + " ; " + Arrays.toString(d) + " ; " + Arrays.toString(pi);
 	}
 }
