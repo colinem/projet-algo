@@ -72,8 +72,11 @@ public interface Graph {
 	 * Fournit une réprésentation du graphe au format .dot
 	 * @return une réprésentation du graphe au format .dot
 	 */
-	default String toGraphviz() { 
-		return null; // TODO à implémenter 
+	default String toGraphviz() {
+		var sb = new StringBuilder("digraph my_graph {");
+		for (var i = 0 ; i < numberOfVertices() ; ++i)
+			forEachEdge(i, j -> sb.append(j.getStart()).append(" --> ").append(j.getEnd()));
+		return sb.append("\n}").toString();
 	}
 	
 	/**
@@ -168,7 +171,7 @@ public interface Graph {
 			var x = extractMin(border, f);
 			if (x == t)
                 return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi)); // Verifier que c'est bien g et f les arguments
-			border.remove(x);
+			border.remove(Integer.valueOf(x));
 			graph.forEachEdge(x, edge -> {
 				var y = edge.getEnd();
 				if (computed.contains(edge.getEnd())) {
