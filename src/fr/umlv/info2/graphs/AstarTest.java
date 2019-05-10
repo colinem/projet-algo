@@ -2,7 +2,7 @@ package fr.umlv.info2.graphs;
 
 import org.junit.jupiter.api.Test;
 
-class GraphTest {
+class AstarTest {
 
 	@Test
 	void test1() {
@@ -15,7 +15,8 @@ class GraphTest {
 		graph.addEdge(2, 4, 2);
 		graph.addEdge(3, 2, 2);
 		Graph.astar(graph, 0, 4, new int[5][2]).get().printShortestPath();
-		// Shortest path from 0 to 4 :    0 --> 1 --> 2 --> 4    (weight = 5)
+		// Astar :  steps.
+		// Shortest path of a length of 5 from 1 to 5 :    1 --> 2 --> 3 --> 5
 	}
 
 	@Test
@@ -29,7 +30,8 @@ class GraphTest {
 		graph.addEdge(3, 5, 11);
 		graph.addEdge(4, 3, 4);
 		Graph.astar(graph, 0, 5, new int[6][2]).get().printShortestPath();
-		// Shortest path from 0 to 5 :    0 --> 2 --> 4 --> 3 --> 5    (weight = 20)
+		// Astar :  steps.
+		// Shortest path of a length of 20 from 1 to 6 :    1 --> 3 --> 5 --> 4 --> 6
 	}
 
 }

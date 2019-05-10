@@ -18,9 +18,11 @@ public class ShortestPathFromOneVertex {
 	}
 
 	public void printShortestPath() {
-		var sb = new StringBuilder("Shortest path from ").append(source).append(" to ").append(destination).append(" :    ").append(source);
+		var sb = new StringBuilder("Astar : ").append(nSteps).append(" steps.\n")
+				.append("Shortest path of a length of ").append(d[destination])
+				.append(" from ").append(source+1).append(" to ").append(destination+1)
+				.append(" :    ").append(source);
 		printShortestPathTo(sb, destination);
-		sb.append("    (weight = ").append(d[destination]).append(" ; done in ").append(nSteps).append(" steps)");
 		System.out.println(sb);
 	}
 	
@@ -28,7 +30,7 @@ public class ShortestPathFromOneVertex {
 		if (source == destination)
 			return;
 		printShortestPathTo(sb, pi[destination]);
-		sb.append(" --> ").append(destination);
+		sb.append(" --> ").append(destination +1); /*+1 because our data structure begins at 0 whereas the file nodes begin at 1*/
 	}
 
 	@Override

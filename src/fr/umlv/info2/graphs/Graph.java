@@ -198,4 +198,8 @@ public interface Graph {
 		return Optional.empty();
 	}
 	
+	public static Optional<ShortestPathFromOneVertex> astar(Graph graph, int[][] coord) {
+		return astar(graph, 0, graph.numberOfVertices()-1, coord);
+	}
+	
 }
