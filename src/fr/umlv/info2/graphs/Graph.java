@@ -167,10 +167,12 @@ public interface Graph {
 		border.add(s);
 		computed.add(s);
 
+		var nSteps = 0;
 		while (!border.isEmpty()) {
+			++nSteps;
 			var x = extractMin(border, f);
 			if (x == t)
-                return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi)); // Verifier que c'est bien g et f les arguments
+                return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi, nSteps)); // Verifier que c'est bien g et f les arguments
 			border.remove(Integer.valueOf(x));
 			graph.forEachEdge(x, edge -> {
 				var y = edge.getEnd();

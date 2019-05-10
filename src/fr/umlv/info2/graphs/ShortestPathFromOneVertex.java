@@ -7,17 +7,20 @@ public class ShortestPathFromOneVertex {
 	private final int destination;
 	private final int[] d;
 	private final int[] pi;
+	private final int nSteps;
 
-	ShortestPathFromOneVertex(int source, int destination, int[] d, int[] pi) {
+	ShortestPathFromOneVertex(int source, int destination, int[] d, int[] pi, int nSteps) {
 		this.source = source;
 		this.destination = destination;
 		this.d = d;
 		this.pi = pi;
+		this.nSteps = nSteps;
 	}
 
 	public void printShortestPath() {
 		var sb = new StringBuilder("Shortest path from ").append(source).append(" to ").append(destination).append(" :    ").append(source);
 		printShortestPathTo(sb, destination);
+		sb.append("    (weight = ").append(d[destination]).append(" ; done in ").append(nSteps).append(" steps)");
 		System.out.println(sb);
 	}
 	
