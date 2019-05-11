@@ -26,7 +26,7 @@ public class Main {
 				return;
 			}
 			
-			path.ifPresentOrElse(System.out::println, 
+			path.ifPresentOrElse(p -> p.printShortestPath(), 
 					() -> System.out.println("The destination is not accessible from the source."));
 			
 		} catch (InvalidPathException | NumberFormatException e) {

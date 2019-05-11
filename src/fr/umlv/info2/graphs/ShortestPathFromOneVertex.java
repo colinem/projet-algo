@@ -21,7 +21,7 @@ public class ShortestPathFromOneVertex {
 		var sb = new StringBuilder("Astar : ").append(nSteps).append(" steps.\n")
 				.append("Shortest path of a length of ").append(d[destination])
 				.append(" from ").append(source+1).append(" to ").append(destination+1)
-				.append(" :    ").append(source);
+				.append(" :    ").append(source+1);
 		printShortestPathTo(sb, destination);
 		System.out.println(sb);
 	}
