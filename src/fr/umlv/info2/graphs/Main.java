@@ -13,20 +13,25 @@ public class Main {
 
 		try {
 			Optional<ShortestPathFromOneVertex> path = null;
-			if (args.length == 1)
-				path = Graph.astar(Parser.parseGraph(Path.of("docs/" + args[0] + ".gr")), 
-						Parser.parseCoordonates(Path.of("docs/" + args[0] + ".co")));
-			else if (args.length == 3)
-				path = Graph.astar(Parser.parseGraph(Path.of("docs/" + args[0] + ".gr")), 
-						Integer.parseInt(args[1])-1, 
-						Integer.parseInt(args[2])-1, 
-						Parser.parseCoordonates(Path.of("docs/" + args[0] + ".co")));
+			if (args.length == 1){
+				var graph = Parser.parseGraph(Path.of("docs/" + args[0] + ".gr"));
+				var coord = Parser.parseCoordonates(Path.of("docs/" + args[0] + ".co"));
+				path = Graph.astar(graph, coord);
+
+			}
+			else if (args.length == 3){
+				var graph = Parser.parseGraph(Path.of("docs/" + args[0] + ".gr"));
+				var coord = Parser.parseCoordonates(Path.of("docs/" + args[0] + ".co"));
+				path = Graph.astar(graph, Integer.parseInt(args[1])-1,
+						Integer.parseInt(args[2])-1, coord);
+			}
+
 			else {
 				usage();
 				return;
 			}
 			
-			path.ifPresentOrElse(p -> p.printShortestPath(), 
+			path.ifPresentOrElse(p -> p.printShortestPath(),
 					() -> System.out.println("The destination is not accessible from the source."));
 			
 		} catch (InvalidPathException | NumberFormatException e) {

@@ -34,4 +34,14 @@ class AstarTest {
 		// Shortest path of a length of 20 from 1 to 6 :    1 --> 3 --> 5 --> 4 --> 6
 	}
 
+
+
+	@Test
+	void test3() {
+
+		//Graph.astar(graph, 1, 7, new int[5][2]).get().printShortestPath();
+		// Astar :  steps.
+		// Shortest path of a length of 5 from 1 to 5 :    1 --> 2 --> 3 --> 5
+	}
+
 }

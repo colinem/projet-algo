@@ -131,12 +131,12 @@ public interface Graph {
 	private static int extractMin(List<Integer> F, int[] d) {
 		int min = Integer.MAX_VALUE;
 		int vertice = 0;
-		for(int i=0; i<d.length; i++) {
-			if(d[i] < min && F.contains(i)) {
-				min = d[i];
-				vertice = i;
-			}
-		}
+		for(var i: F){
+		    if(d[i] < min){
+		        min = d[i];
+		        vertice = i;
+            }
+        }
 		F.remove((Integer) vertice);
 		return vertice;
 	}
@@ -161,7 +161,7 @@ public interface Graph {
 				f[tmp] = Integer.MAX_VALUE;
 				g[tmp] = Integer.MAX_VALUE;
 			}
-
+		g[s] = 0; // On avait oublié ça
 		var border = new ArrayList<Integer>();
 		var computed = new ArrayList<Integer>();
 		border.add(s);
@@ -173,10 +173,10 @@ public interface Graph {
 			var x = extractMin(border, f);
 			if (x == t)
                 return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi, nSteps)); // Verifier que c'est bien g et f les arguments
-			border.remove(Integer.valueOf(x));
+
 			graph.forEachEdge(x, edge -> {
 				var y = edge.getEnd();
-				if (computed.contains(edge.getEnd())) {
+				if (computed.contains(y)) {
 					if (g[y] > g[x] + edge.getValue()) {
 						g[y] = g[x] + edge.getValue();
 						pi[y] = x;
@@ -199,7 +199,7 @@ public interface Graph {
 	}
 	
 	public static Optional<ShortestPathFromOneVertex> astar(Graph graph, int[][] coord) {
-		return astar(graph, 0, graph.numberOfVertices()-1, coord);
+		return astar(graph, 0, graph.numberOfVertices() - 1, coord);
 	}
 	
 }
