@@ -14,14 +14,14 @@ public class Main {
 		try {
 			Optional<ShortestPathFromOneVertex> path = null;
 			if (args.length == 1){
-				var graph = Parser.parseGraph(Path.of("docs/" + args[0] + ".gr"));
-				var coord = Parser.parseCoordonates(Path.of("docs/" + args[0] + ".co"));
+				var graph = Parser.parseGraph(Path.of("resources/" + args[0] + ".gr"));
+				var coord = Parser.parseCoordonates(Path.of("resources/" + args[0] + ".co"));
 				path = Graph.astar(graph, coord);
 
 			}
 			else if (args.length == 3){
-				var graph = Parser.parseGraph(Path.of("docs/" + args[0] + ".gr"));
-				var coord = Parser.parseCoordonates(Path.of("docs/" + args[0] + ".co"));
+				var graph = Parser.parseGraph(Path.of("resources/" + args[0] + ".gr"));
+				var coord = Parser.parseCoordonates(Path.of("resources/" + args[0] + ".co"));
 				path = Graph.astar(graph, Integer.parseInt(args[1])-1,
 						Integer.parseInt(args[2])-1, coord);
 			}
