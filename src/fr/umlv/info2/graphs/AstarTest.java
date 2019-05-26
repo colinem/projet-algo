@@ -1,6 +1,11 @@
 package fr.umlv.info2.graphs;
 
 import org.junit.jupiter.api.Test;
+import parser.Parser;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 class AstarTest {
 
@@ -39,9 +44,22 @@ class AstarTest {
 	@Test
 	void test3() {
 
-		//Graph.astar(graph, 1, 7, new int[5][2]).get().printShortestPath();
-		// Astar :  steps.
-		// Shortest path of a length of 5 from 1 to 5 :    1 --> 2 --> 3 --> 5
+
+		try {
+			Optional<ShortestPathFromOneVertex> path = Optional.empty();
+
+			var graph = Parser.parseGraph(Path.of("docs/test.gr"));
+			var coord = Parser.parseCoordonates(Path.of("docs/test.co"));
+			Graph.astar(graph, coord).get().printShortestPath();
+
+			// Astar :  steps.
+			// Shortest path of a length of 5 from 1 to 5 :    1 --> 2 --> 3 --> 5
+		} catch (IOException e) {
+			System.out.println("Echec du test");
+		}
+
+
+
 	}
 
 }

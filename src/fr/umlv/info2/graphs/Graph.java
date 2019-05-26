@@ -3,11 +3,7 @@ package fr.umlv.info2.graphs;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
@@ -163,9 +159,12 @@ public interface Graph {
 			}
 		g[s] = 0; // On avait oublié ça
 		var border = new ArrayList<Integer>();
-		var computed = new ArrayList<Integer>();
+		//var computed = new ArrayList<Integer>();
+
+
+		HashMap<Integer, Void> computed = new HashMap<>();
 		border.add(s);
-		computed.add(s);
+		computed.put(s, null);
 
 		var nSteps = 0;
 		while (!border.isEmpty()) {
@@ -176,7 +175,7 @@ public interface Graph {
 
 			graph.forEachEdge(x, edge -> {
 				var y = edge.getEnd();
-				if (computed.contains(y)) {
+				if (computed.containsKey(y)) {
 					if (g[y] > g[x] + edge.getValue()) {
 						g[y] = g[x] + edge.getValue();
 						pi[y] = x;
@@ -191,7 +190,7 @@ public interface Graph {
 					pi[y] = x;
 					f[y] = g[y] + h[y];
 					border.add(y);
-					computed.add(y);
+					computed.put(y, null);
 				}
 			});
 		}

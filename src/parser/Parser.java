@@ -35,7 +35,7 @@ public class Parser {
 					try {
 						g.addEdge(s, d, Integer.parseInt(t[3]));
 					} catch (IllegalArgumentException e) {
-						LOG.info("There is a duplicate line.");
+						//LOG.info("There is a duplicate line.");
 					}
 				}
 			});
