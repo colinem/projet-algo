@@ -13,7 +13,7 @@ public interface Graph {
 	 * @return le nombre d'arêtes du graphe
 	 */
 	int numberOfEdges();
-	
+
 	/**
 	 * Le nombre de sommets du graphe.
 	 * @return le nombre de sommets du graphe
@@ -74,7 +74,7 @@ public interface Graph {
 			forEachEdge(i, j -> sb.append(j.getStart()).append(" --> ").append(j.getEnd()));
 		return sb.append("\n}").toString();
 	}
-	
+
 	/**
 	 * Création d'un graphe aléatoire avec un nombre de sommets et d'arêtes fixé
 	 * @param n nombre de sommets
@@ -128,11 +128,11 @@ public interface Graph {
 		int min = Integer.MAX_VALUE;
 		int vertice = 0;
 		for(var i: F){
-		    if(d[i] < min){
-		        min = d[i];
-		        vertice = i;
-            }
-        }
+			if(d[i] < min){
+				min = d[i];
+				vertice = i;
+			}
+		}
 		F.remove((Integer) vertice);
 		return vertice;
 	}
@@ -171,7 +171,7 @@ public interface Graph {
 			++nSteps;
 			var x = extractMin(border, f);
 			if (x == t)
-                return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi, nSteps)); // Verifier que c'est bien g et f les arguments
+				return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi, nSteps)); // Verifier que c'est bien g et f les arguments
 
 			graph.forEachEdge(x, edge -> {
 				var y = edge.getEnd();
@@ -196,9 +196,9 @@ public interface Graph {
 		}
 		return Optional.empty();
 	}
-	
+
 	public static Optional<ShortestPathFromOneVertex> astar(Graph graph, int[][] coord) {
 		return astar(graph, 0, graph.numberOfVertices() - 1, coord);
 	}
-	
+
 }
