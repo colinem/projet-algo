@@ -12,6 +12,8 @@ How to use it
 -------------
 Execute the Main with one or three arguments.
 
+You have to put your file .gr and .co in the directory _resources_ .
+
 If one argument :
 - file name without extension
 
