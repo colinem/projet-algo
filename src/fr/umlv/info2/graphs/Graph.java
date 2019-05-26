@@ -157,12 +157,10 @@ public interface Graph {
 				f[tmp] = Integer.MAX_VALUE;
 				g[tmp] = Integer.MAX_VALUE;
 			}
-		g[s] = 0; // On avait oublié ça
+		g[s] = 0;
 		var border = new ArrayList<Integer>();
-		//var computed = new ArrayList<Integer>();
-
-
 		HashMap<Integer, Void> computed = new HashMap<>();
+
 		border.add(s);
 		computed.put(s, null);
 
