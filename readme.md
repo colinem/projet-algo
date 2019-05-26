@@ -9,8 +9,10 @@ If you don't specify points then it will take the first point as starting point 
 How to use it
 -------------
 Execute the Main with one or three arguments.
+
 If one argument :
 - file name without extension
+
 If three arguments :
 - file name without extension
 - starting point
