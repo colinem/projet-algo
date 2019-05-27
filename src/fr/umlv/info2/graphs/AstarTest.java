@@ -19,9 +19,10 @@ class AstarTest {
 		graph.addEdge(2, 3, 4);
 		graph.addEdge(2, 4, 2);
 		graph.addEdge(3, 2, 2);
+		Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1).printShortestPath();
 		Graph.astar(graph, 0, 4, new int[5][2]).get().printShortestPath();
 		// Astar :  steps.
-		// Shortest path of a length of 5 from 1 to 5 :    1 --> 2 --> 3 --> 5
+		// Shortest path of a length of 8 (miles) from 1 to 5 :    1 --> 2 --> 3 --> 5
 	}
 
 	@Test
@@ -34,9 +35,12 @@ class AstarTest {
 		graph.addEdge(2, 4, 3);
 		graph.addEdge(3, 5, 11);
 		graph.addEdge(4, 3, 4);
+		Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1).printShortestPath();
 		Graph.astar(graph, 0, 5, new int[6][2]).get().printShortestPath();
+
+
 		// Astar :  steps.
-		// Shortest path of a length of 20 from 1 to 6 :    1 --> 3 --> 5 --> 4 --> 6
+		// Shortest path of a length of 32 (miles) from 1 to 6 :    1 --> 3 --> 5 --> 4 --> 6
 	}
 
 
@@ -48,18 +52,20 @@ class AstarTest {
 		try {
 			Optional<ShortestPathFromOneVertex> path = Optional.empty();
 
-			var graph = Parser.parseGraph(Path.of("docs/test.gr"));
-			var coord = Parser.parseCoordonates(Path.of("docs/test.co"));
+			var graph = Parser.parseGraph(Path.of("resources/test.gr"));
+			var coord = Parser.parseCoordonates(Path.of("resources/test.co"));
+			Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1).printShortestPath();
 			Graph.astar(graph, coord).get().printShortestPath();
 
 			// Astar :  steps.
-			// Shortest path of a length of 5 from 1 to 5 :    1 --> 2 --> 3 --> 5
+			// Shortest path of a length of 5 (miles) from 1 to 5 :    1 --> 2 --> 3 --> 5
 		} catch (IOException e) {
 			System.out.println("Echec du test");
 		}
 
-
-
 	}
+
+
+
 
 }

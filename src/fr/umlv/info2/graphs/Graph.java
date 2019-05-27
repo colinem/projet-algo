@@ -163,7 +163,7 @@ public interface Graph {
 				g[tmp] = Integer.MAX_VALUE;
 			}
 		g[s] = 0;
-		//var border = new ArrayList<Integer>();
+//		var border = new ArrayList<Integer>();
 		var border = new PriorityQueue(f);
 		var computed = new HashMap<Integer, Void>();
 //		border.add(s);
@@ -208,4 +208,37 @@ public interface Graph {
 		return astar(graph, 0, graph.numberOfVertices() - 1, coord);
 	}
 
+
+
+
+
+	public static ShortestPathFromOneVertex dijkstra(Graph g, int source, int destination) {
+		List<Integer> F = new ArrayList<>();
+		int[] d = new int[g.numberOfVertices()];
+		int[] pi = new int[g.numberOfVertices()];
+
+		for(int t=0; t<g.numberOfVertices(); t++) {
+			F.add(t);
+			pi[t] = -1;
+			if(t == source) {
+				d[t] = 0;
+			} else {
+				d[t] = Integer.MAX_VALUE;
+			}
+		}
+
+		int nbSteps = 0;
+		while(F.size() != 0) {
+			nbSteps++;
+			int t = extractMin(F, d);
+			g.forEachEdge(t, e -> {
+				int s = e.getEnd();
+				if(d[t] + g.getWeight(t, s) < d[s]) {
+					d[s] = d[t] + g.getWeight(t, s);
+					pi[s] = t;
+				}
+			});
+		}
+		return new ShortestPathFromOneVertex(source, destination, d, pi,nbSteps);
+	}
 }
