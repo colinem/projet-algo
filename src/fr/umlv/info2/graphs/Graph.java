@@ -176,7 +176,7 @@ public interface Graph {
 //			var x = extractMin(border, f);
 			var x = border.extractMin();
 			if (x == t)
-				return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi, nSteps));
+				return Optional.of(new ShortestPathFromOneVertex("Astar", s, t, g, pi, nSteps));
 
 			graph.forEachEdge(x, edge -> {
 				var y = edge.getEnd();
@@ -212,33 +212,56 @@ public interface Graph {
 
 
 
-	public static ShortestPathFromOneVertex dijkstra(Graph g, int source, int destination) {
-		List<Integer> F = new ArrayList<>();
-		int[] d = new int[g.numberOfVertices()];
-		int[] pi = new int[g.numberOfVertices()];
-
-		for(int t=0; t<g.numberOfVertices(); t++) {
-			F.add(t);
-			pi[t] = -1;
-			if(t == source) {
-				d[t] = 0;
-			} else {
-				d[t] = Integer.MAX_VALUE;
+	public static Optional<ShortestPathFromOneVertex> dijkstra(Graph graph, int s, int t, int[][] coord) {
+		// Initialiser f, g, h
+		var f = new int[graph.numberOfVertices()];
+		var g = new int[graph.numberOfVertices()];
+		var h = new int[graph.numberOfVertices()];
+		var pi = new int[graph.numberOfVertices()];
+		for (var tmp = 0 ; tmp < graph.numberOfVertices() ; tmp++)
+			if(tmp != s) {
+				f[tmp] = Integer.MAX_VALUE;
+				g[tmp] = Integer.MAX_VALUE;
 			}
-		}
+		g[s] = 0;
+//		var border = new ArrayList<Integer>();
+		var border = new PriorityQueue(f);
+		var computed = new HashMap<Integer, Void>();
+//		border.add(s);
+		border.add(s, true);
+		computed.put(s, null);
 
-		int nbSteps = 0;
-		while(F.size() != 0) {
-			nbSteps++;
-			int t = extractMin(F, d);
-			g.forEachEdge(t, e -> {
-				int s = e.getEnd();
-				if(d[t] + g.getWeight(t, s) < d[s]) {
-					d[s] = d[t] + g.getWeight(t, s);
-					pi[s] = t;
+		var nSteps = 0;
+		while (!border.isEmpty()) {
+			++nSteps;
+//			var x = extractMin(border, f);
+			var x = border.extractMin();
+			if (x == t)
+				return Optional.of(new ShortestPathFromOneVertex("Dijkstra", s, t, g, pi, nSteps));
+
+			graph.forEachEdge(x, edge -> {
+				var y = edge.getEnd();
+				if (computed.containsKey(y)) {
+					if (g[y] > g[x] + edge.getValue()) {
+						g[y] = g[x] + edge.getValue();
+						pi[y] = x;
+						f[y] = g[y] + h[y];
+//						if (!border.contains(y)) {
+//							border.add(y);
+//						}
+						border.add(y, false);
+					}
+				}
+				else {
+					g[y] = g[x] + edge.getValue();
+					pi[y] = x;
+					f[y] = g[y] + h[y];
+//					border.add(y);
+					border.add(y, true);
+					computed.put(y, null);
 				}
 			});
 		}
-		return new ShortestPathFromOneVertex(source, destination, d, pi,nbSteps);
+		return Optional.empty();
 	}
 }

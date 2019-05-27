@@ -19,7 +19,7 @@ class AstarTest {
 		graph.addEdge(2, 3, 4);
 		graph.addEdge(2, 4, 2);
 		graph.addEdge(3, 2, 2);
-		Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1).printShortestPath();
+		Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1, new int[5][2]).get().printShortestPath();
 		Graph.astar(graph, 0, 4, new int[5][2]).get().printShortestPath();
 		// Astar :  steps.
 		// Shortest path of a length of 8 (miles) from 1 to 5 :    1 --> 2 --> 3 --> 5
@@ -35,7 +35,7 @@ class AstarTest {
 		graph.addEdge(2, 4, 3);
 		graph.addEdge(3, 5, 11);
 		graph.addEdge(4, 3, 4);
-		Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1).printShortestPath();
+		Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1, new int[6][2]).get().printShortestPath();
 		Graph.astar(graph, 0, 5, new int[6][2]).get().printShortestPath();
 
 
@@ -54,7 +54,7 @@ class AstarTest {
 
 			var graph = Parser.parseGraph(Path.of("resources/test.gr"));
 			var coord = Parser.parseCoordonates(Path.of("resources/test.co"));
-			Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1).printShortestPath();
+			Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1, coord).get().printShortestPath();
 			Graph.astar(graph, coord).get().printShortestPath();
 
 			// Astar :  steps.

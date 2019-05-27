@@ -14,6 +14,7 @@ public class Main {
 
 		try {
 			Optional<ShortestPathFromOneVertex> path = null;
+			Optional<ShortestPathFromOneVertex> pathDijkstra = null;
 
 			long t0 = System.currentTimeMillis();
 			long t1;
@@ -25,15 +26,19 @@ public class Main {
 				t1 = System.currentTimeMillis();
 				System.out.println("Temps d'execution du parsing: " + (t1 - t0) + " ms");
 				path = Graph.astar(graph, coord);
+				pathDijkstra = Graph.dijkstra(graph, 0, graph.numberOfVertices() - 1,coord);
 
 			}
 			else if (args.length == 3){
 				var graph = Parser.parseGraph(Path.of("resources/" + args[0] + ".gr"));
 				var coord = Parser.parseCoordonates(Path.of("resources/" + args[0] + ".co"));
+				//var graph = Parser.parseGraph(Path.of(	 args[0] + ".gr"));
+				//var coord = Parser.parseCoordonates(Path.of( args[0] + ".co"));
 				t1 = System.currentTimeMillis();
 				System.out.println("Temps d'execution du parsing: " + (t1 - t0) + " ms");
 				path = Graph.astar(graph, Integer.parseInt(args[1])-1,
 						Integer.parseInt(args[2])-1, coord);
+				pathDijkstra = Graph.dijkstra(graph, Integer.parseInt(args[1])-1, Integer.parseInt(args[2])-1, coord);
 			}
 
 			else {
@@ -41,6 +46,10 @@ public class Main {
 				return;
 			}
 			long t3 = System.currentTimeMillis();
+
+
+			pathDijkstra.ifPresentOrElse(p -> p.printShortestPath(),
+					() -> System.out.println("The destination is not accessible from the source."));
 
 
 			path.ifPresentOrElse(p -> p.printShortestPath(),
