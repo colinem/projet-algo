@@ -18,7 +18,7 @@ public class Main {
 			long t0 = System.currentTimeMillis();
 			long t1;
 			if (args.length == 1){
-				var graph = Parser.parseGraph(Path.of("resources/" + args[0] + ".gr"));
+				var graph = Parser.parseGraph(Path.of(	"resources/" + args[0] + ".gr"));
 				var coord = Parser.parseCoordonates(Path.of("resources/" + args[0] + ".co"));
 				t1 = System.currentTimeMillis();
 				System.out.println("Temps d'execution du parsing: " + (t1 - t0) + " ms");

@@ -3,7 +3,12 @@ package fr.umlv.info2.graphs;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 
@@ -158,18 +163,20 @@ public interface Graph {
 				g[tmp] = Integer.MAX_VALUE;
 			}
 		g[s] = 0;
-		var border = new ArrayList<Integer>();
-		HashMap<Integer, Void> computed = new HashMap<>();
-
-		border.add(s);
+		//var border = new ArrayList<Integer>();
+		var border = new PriorityQueue(f);
+		var computed = new HashMap<Integer, Void>();
+//		border.add(s);
+		border.add(s, true);
 		computed.put(s, null);
 
 		var nSteps = 0;
 		while (!border.isEmpty()) {
 			++nSteps;
-			var x = extractMin(border, f);
+//			var x = extractMin(border, f);
+			var x = border.extractMin();
 			if (x == t)
-				return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi, nSteps)); // Verifier que c'est bien g et f les arguments
+				return Optional.of(new ShortestPathFromOneVertex(s, t, g, pi, nSteps));
 
 			graph.forEachEdge(x, edge -> {
 				var y = edge.getEnd();
@@ -178,16 +185,18 @@ public interface Graph {
 						g[y] = g[x] + edge.getValue();
 						pi[y] = x;
 						f[y] = g[y] + h[y];
-						if (!border.contains(y)) {
-							border.add(y);
-						}
+//						if (!border.contains(y)) {
+//							border.add(y);
+//						}
+						border.add(y, false);
 					}
 				}
 				else {
 					g[y] = g[x] + edge.getValue();
 					pi[y] = x;
 					f[y] = g[y] + h[y];
-					border.add(y);
+//					border.add(y);
+					border.add(y, true);
 					computed.put(y, null);
 				}
 			});
